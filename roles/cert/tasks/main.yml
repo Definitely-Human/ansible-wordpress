@@ -1,0 +1,10 @@
+---
+- name: Install certificate tool
+  ansible.builtin.command: "curl https://get.acme.sh | sh -s email= {{ DNS_owner_email  }}"
+
+- name: Install certificate 
+  become: false
+  ansible.builtin.command: "~/.acme.sh/acme.sh --issue --dns dns_cf -d '{{ subdomain_name }}.{{ domain_name }}'"
+  environment:
+    CF_Token: "{{ cf_token }}" 
+    CF_Zone_ID: "{{ cf_zone_id }}"

@@ -1,0 +1,18 @@
+---
+- name: Add nginx stable repository from PPA and install its signing key on Ubuntu target
+  ansible.builtin.apt_repository:
+    repo: ppa:ondrej/php
+  when: ansible_os_family == "Debian"
+- name: Install PHP 
+  ansible.builtin.apt:
+    name: "php{{ php_version }}" 
+    state: present
+    allow_downgrade: yes
+  when: ansible_os_family == "Debian"
+- name: Install the selected PHP version 
+  ansible.builtin.apt:
+    name: "php{{ php_version }}-{{ item }}"
+    state: present
+    allow_downgrade: yes
+  loop: "{{ php_packages }}"
+  when: ansible_os_family == "Debian"
